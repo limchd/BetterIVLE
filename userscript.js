@@ -4,7 +4,7 @@
 // @domain      ivle.nus.edu.sg
 // @include     http://ivle.nus.edu.sg/*
 // @include     https://ivle.nus.edu.sg/*
-// @version     0.0.3
+// @version     0.0.4
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
@@ -49,28 +49,28 @@ if(document.URL.search(/v1/i)==-1) isClassic=true;
 //New IVLE
 if(!isClassic){
     var skipRest=false;
+    //General
+    //Fontsize reduction
+    $("body").css({"font-size":"13px"});
+    
     //Files/Workbin hack
     if(!skipRest && document.URL.search(/WorkbinID/i)!=-1){
         //Inserting our folder tree panel
         var treePanel = document.createElement("div");
-        var mainPanel = document.querySelector(".panel-default");
-        mainPanel.parentNode.insertBefore(treePanel,mainPanel);
-        
+        var mainPanel = $(".panel-default").css({"float":"right","width":"75%"});
+        $(mainPanel).find("#titleNav").html("<span>" + $(mainPanel).find(".lblHead").html() + "</span>");
+        $(mainPanel).parent().css("padding-left","0");
+        $(mainPanel).before(treePanel);
+
         //HTML of treePanel
-        $(treePanel).attr("id","BIVLE_treePanel").addClass("panel").css({"float":"left","width":"25%"});
+        $(treePanel).attr("id","BIVLE_treePanel").addClass("panel panel-default").css({"float":"left","width":"25%"});
         treePanel.innerHTML = "<div class='panel-heading'><img src='/v1/Content/Images/treeview.png' style='vertical-align:top' /> Folders</div><div class='panel-body' style='padding:1%'><ul style='display:block;list-style:none;padding-left:0;max-height:450px;overflow-x:hidden;overflow-y:auto;' id='BIVLE_foldermenu'><li class='dropdown-header'><span class='icon-spinner'></span>&nbsp;Loading folders...</li></ul></div>";
-        $("#BIVLE_treePanel .panel-heading").css("background",$(".panel-default .panel-heading").css("background"));
-        
+
         //Getting the folders
-        var currentD = new Date();
-        $.get("getfoldermenu.ashx?CourseID=0be58c4a-db13-4014-98fb-8dbf4dcbefdc&_=" + currentD.getTime(), function(data){
+        //Get CourseID
+        $.get("getfoldermenu.ashx?CourseID=" + document.URL.match(/CourseID=(.*?)&/i)[1] + "&_=" + $.now(), function(data){
             $("#BIVLE_foldermenu").html(data);
         });
-
-        //Sanitising the default body panel
-        mainPanel.style.float = "right";
-        mainPanel.style.width = "73%";
-        mainPanel.querySelector("#titleNav").innerHTML = "<span>" + mainPanel.querySelector("#titleNav .lblHead").innerHTML + "</span>";
 
         //skipRest = true;
     }
@@ -78,47 +78,44 @@ if(!isClassic){
     //What's New hack
     if(!skipRest && document.URL.search(/whats_new/i)!=-1){
         //Check for last visited time
-        var currentD = new Date();
         var oldD = new Date();
         var storedD = GM_getValue("BIVLE_WhatsNewLastVisited","undefined");
         if(storedD!="undefined"){
             oldD.setTime(storedD);
             //Search within each day
             var tempE = new Date();
-            nodeList = document.querySelectorAll("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_spnStudent h3.panel-title");
-            for(var i=0; i<nodeList.length; i++){
-                tempE.setTime(Date.parse(nodeList[i].innerHTML));
+            $("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudent").html($("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_spnStudent").html());
+            $.each($("h3.panel-title"),function(i,obj){
+                tempE.setTime(Date.parse($(obj).html()));
                 //Case 1: New days (new <h3> panels)
                 if(tempE > oldD){
                     //TODO: check if it's an empty day afterall
                     //TODO: get better colours
 
                     //Highlight panel
-                    nodeList[i].parentNode.style.backgroundColor="#EE2222";
+                    $(obj).parent().css("backgroundColor","#EE2222");
                     //Highlight every entry in each new day
-                    nodeList2 = nodeList[i].parentNode.parentNode.querySelectorAll("li");
-                    for(var j=0; j<nodeList2.length; j++)
-                        nodeList2[j].style.color="#CC2222";
+                    $.each($(obj).parent().parent().children("li"), function(j,obj2){
+                        $(obj2).css("color","#CC2222");
+                    });
                 }else{
                     //Case 2: Same day (check for new items in <li>)
                     if(tempE.getDay()==oldD.getDay()){
-                        nodeList2 = nodeList[i].parentNode.parentNode.querySelectorAll("li");
-                        for(var j=0; j<nodeList2.length; j++){
+                        $.each($(obj).parent().parent().children("li"), function(j, obj2){
                             //Get time
-                            nodeA = nodeList2[j].querySelector("a[href]");
-                            if(parseTime(nodeA.innerHTML,tempE) > oldD)
-                                nodeA.parentNode.style.color="#CC2222";
-                        }
+                            if(parseTime($(obj2).child("a[href]").html(),tempE) > oldD)
+                                $(obj2).css("color","#CC2222");
+                        });
                     }
                 }
-            }
+            });
         }
-        GM_setValue("BIVLE_WhatsNewLastVisited",currentD.getTime());
+        GM_setValue("BIVLE_WhatsNewLastVisited",$.now());
         skipRest = true;
     }
 
     if(!skipRest){
-		//Page titles hack
+        //Page titles hack
         var skipBreadcrumb=false;
         var gotModuleCode=false;
 
@@ -152,8 +149,8 @@ if(!isClassic){
             nodeList = document.querySelectorAll("ul.breadcrumb > li");
             addToTitle(nodeList[nodeList.length-1].innerHTML);
         }
-		
-		//Replace title if we have a better one
-		if(betterTitle.trim()!="") document.title = betterTitle;
+
+        //Replace title if we have a better one
+        if(betterTitle.trim()!="") document.title = betterTitle;
     }
 }
