@@ -49,7 +49,7 @@ if(document.URL.search(/v1/i)==-1) isClassic=true;
 //New IVLE
 if(!isClassic){
     var skipRest=false;
-    //Files hack
+    //Files/Workbin hack
     if(!skipRest && document.URL.search(/WorkbinID/i)!=-1){
         //Inserting our folder tree panel
         var treePanel = document.createElement("div");
@@ -118,6 +118,7 @@ if(!isClassic){
     }
 
     if(!skipRest){
+		//Page titles hack
         var skipBreadcrumb=false;
         var gotModuleCode=false;
 
@@ -146,13 +147,13 @@ if(!isClassic){
             addToTitle("Usage:");
         }
 
-        //Otherwise find last item on breadcrumb
+        //Otherwise just find last item on breadcrumb
         if(!skipBreadcrumb){
             nodeList = document.querySelectorAll("ul.breadcrumb > li");
             addToTitle(nodeList[nodeList.length-1].innerHTML);
         }
+		
+		//Replace title if we have a better one
+		if(betterTitle.trim()!="") document.title = betterTitle;
     }
 }
-
-//Replace title if we have a better one
-if(betterTitle.trim()!="") document.title = betterTitle;

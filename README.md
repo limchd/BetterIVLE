@@ -17,7 +17,7 @@ This is a userscript, meaning it runs within your browser whenever you visit IVL
 </ul>
 
 <h2>Purpose</h2>
-BIVLE is not meant to be an overhaul of the new IVLE interface, but a speedier testbed of easy, hackish solutions meant to augmenting some of its more lacking parts.
+BIVLE is not meant to be an overhaul of the new IVLE interface, but a speedier testbed of easy, hackish solutions meant to augment some of its lacking features.
 The new IVLE is still in development after all, and you can still post your feedback on the IVLE forum.
 
 <h2>Feedback</h2>
