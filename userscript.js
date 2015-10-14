@@ -4,7 +4,7 @@
 // @domain      ivle.nus.edu.sg
 // @include     http://ivle.nus.edu.sg/*
 // @include     https://ivle.nus.edu.sg/*
-// @version     0.0.4
+// @version     0.0.4a
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
@@ -87,21 +87,24 @@ if(!isClassic){
             $("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudent").html($("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_spnStudent").html());
             $.each($("h3.panel-title"),function(i,obj){
                 tempE.setTime(Date.parse($(obj).html()));
+                var childBullets = $(obj).parent().parent().find("li");
                 //Case 1: New days (new <h3> panels)
                 if(tempE > oldD){
-                    //TODO: check if it's an empty day afterall
                     //TODO: get better colours
-
-                    //Highlight panel
-                    $(obj).parent().css("backgroundColor","#EE2222");
-                    //Highlight every entry in each new day
-                    $.each($(obj).parent().parent().children("li"), function(j,obj2){
-                        $(obj2).css("color","#CC2222");
-                    });
+                    
+                    //Is this new day empty?
+                    if($(childBullets).length){
+                        //Highlight panel
+                        $(obj).parent().css("backgroundColor","#EE2222");
+                        //Highlight every entry in each new day
+                        $.each($(childBullets), function(j,obj2){
+                            $(obj2).css("color","#CC2222");
+                        });
+                    }
                 }else{
                     //Case 2: Same day (check for new items in <li>)
                     if(tempE.getDay()==oldD.getDay()){
-                        $.each($(obj).parent().parent().children("li"), function(j, obj2){
+                        $.each($(childBullets), function(j, obj2){
                             //Get time
                             if(parseTime($(obj2).child("a[href]").html(),tempE) > oldD)
                                 $(obj2).css("color","#CC2222");
