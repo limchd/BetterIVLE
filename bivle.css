@@ -1,0 +1,19 @@
+﻿body{
+	/* font-size: 14px !important; */
+}
+
+.navbar{
+	margin-bottom: 0px !important;
+}
+
+table.breadcrumb{
+	margin-bottom: 0px !important;
+}
+
+.panel{
+	margin-bottom: 0px !important;
+}
+
+.table > tbody > tr > th{
+	padding: 2px !important;
+}
