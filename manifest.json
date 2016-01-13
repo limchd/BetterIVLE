@@ -3,7 +3,7 @@
 
   "name": "BetterIVLE",
   "description": "Enhances the new IVLE interface with usability tweaks.",
-  "version": "0.1",
+  "version": "0.11",
 
   "icons": { "16": "images/icon16.png",
            "48": "images/icon48.png",
@@ -25,8 +25,7 @@
 	  "matches": ["https://ivle.nus.edu.sg/v1/*"],
 	  "css": ["bivle.css"],
 	  "js": ["jquery.js", "bivle.js"],
-	  "run_at" : "document_end",
-	  "all_frames" : true
+	  "run_at" : "document_end"
 	}
 	],
 	"permissions": [

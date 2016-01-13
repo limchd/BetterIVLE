@@ -31,7 +31,6 @@ function parseTime(timeString,dt) {    //Not originally written by me; only made
 }
 
 //*** START ***
-
 var skipRest=false;
 //General
 
@@ -108,12 +107,13 @@ if(!skipRest){
 	var gotModuleCode=false;
 
 	//Get breadcrumb
-	nodeList = document.querySelectorAll("ul.breadcrumb > li > a[href]");
-	for(var i=0; i<nodeList.length; i++)
-		if(nodeList[i].href.search(/module/i)!=-1 && nodeList[i].href.search(/CourseID/i)!=-1){
+	$.each($("ul.breadcrumb > li > a[href]"), function(i,obj){
+		if(obj.href.search(/module/i)!=-1 && obj.href.search(/CourseID/i)!=-1){
 			//Module code
-			gotModuleCode = addToTitle(nodeList[i].innerHTML.replace(/\(.*\)/g,""));
+			gotModuleCode = addToTitle($(obj).text().replace(/\(.*\)/g,""));
+			return false;
 		}
+	});
 
 	//Handle exceptions/hacks
 	//Forum
@@ -124,6 +124,8 @@ if(!skipRest){
 			addToTitle(": " + document.querySelector("#ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_ContentPlaceHolder1_lvPosts_ctrl0_divPostTitle").innerHTML.replace(/Title.*: /g,"").replace("&nbsp;",""),true);
 			skipBreadcrumb = true;
 		}
+		$("div.navbar-btn").prepend("<span style='margin-right: 10px;color:#D9534F'>Unread: " + $("#ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_ContentPlaceHolder1_divUnread").text() + "</span>");
+		$("#ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_ContentPlaceHolder1_div1").remove();
 		if(!skipBreadcrumb) addToTitle(":",true);
 	}
 	//My Usage: intervene only when in module subpage
@@ -131,7 +133,7 @@ if(!skipRest){
 		if(document.URL.search(/CourseID/i)!=-1){
 			$.each($("ul.breadcrumb > li > a[href]"),function(i,obj){
 				if(obj.href.search(/CourseID/i)!=-1){
-					addToTitle(obj.innerHTML);
+					addToTitle($(obj).text());
 					return false;
 				}
 			});
@@ -141,8 +143,7 @@ if(!skipRest){
 
 	//Otherwise just find last item on breadcrumb
 	if(!skipBreadcrumb){
-		nodeList = document.querySelectorAll("ul.breadcrumb > li");
-		addToTitle(nodeList[nodeList.length-1].innerHTML);
+		addToTitle($("ul.breadcrumb > li").filter(":last").text());
 	}
 
 	//Replace title if we have a better one
