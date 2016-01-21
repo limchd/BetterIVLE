@@ -1,4 +1,11 @@
-﻿## 0.11 (2016-01-13)
+﻿## 0.12 (2016-01-22)
+
+Features:
+
+	- Workspace: Reduced margins. Should now barely fit 5 module panels on a 768-pixel height screen
+	- Workspace: Enlarged the files & announcement buttons and moved them to the panel body for accessibility
+
+## 0.11 (2016-01-13)
 
 Features:
 

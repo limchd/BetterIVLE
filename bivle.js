@@ -34,6 +34,17 @@ function parseTime(timeString,dt) {    //Not originally written by me; only made
 var skipRest=false;
 //General
 
+//Workspace hack
+if(!skipRest && document.URL.search(/Workspace/i)!=-1){
+	$.each($("div.panel-collapse > div.panel-body > div.panel"),function(i,obj){
+		//Resize the lecturer row
+		$(obj).find("div.panel-body div.row div.col-md-12").removeClass("col-md-12").addClass("col-md-5");
+		
+		//Move the button node
+		$(obj).find("div.panel-heading div.pull-right").parent().removeClass("col-md-5").addClass("col-md-7 BIVLE_module_buttons").appendTo($(obj).find("div.panel-body div.row"));
+	});
+}
+
 //Files/Workbin hack
 if(!skipRest && document.URL.search(/WorkbinID/i)!=-1){
 	//Inserting our folder tree panel

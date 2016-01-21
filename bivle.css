@@ -2,15 +2,45 @@
 	/* font-size: 14px !important; */
 }
 
+/* Workspace */
 .navbar{
-	margin-bottom: 0px !important;
+	margin-bottom: 5px !important;
+}
+.nav-tabs > li > a{
+	padding: 5px 10px !important;
+}
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_p_w_Workspace{
+	padding: 0px !important;
+}
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_p_w_Workspace div.panel-group{
+	margin-top: -10px !important;
+}
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules > div.panel-heading:first-child{
+	padding: 5px !important;
+	font-size: 10px !important;
+}
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules .panel-title{
+	/*font-size: 14px !important;*/
+}
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules button.btn{
+	padding: 3px 6px !important;
+	font-size: 12px !important;
+}
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules div.panel-body{
+	padding: 10px !important;
+}
+.panel-heading{
+	line-height: normal !important;
+}
+.panel{
+	margin-bottom: 10px !important;
+}
+div.BIVLE_module_buttons{
+	font-size: 20px;
+	text-align: right !important;
 }
 
 table.breadcrumb{
-	margin-bottom: 0px !important;
-}
-
-.panel{
 	margin-bottom: 0px !important;
 }
 
