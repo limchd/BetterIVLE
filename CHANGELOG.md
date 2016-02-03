@@ -1,4 +1,10 @@
-﻿## 0.12 (2016-01-22)
+﻿## 0.13 (2016-02-03)
+
+Bugfixes:
+
+	- What's New: Fixed erratic highlighting of old entries
+
+## 0.12 (2016-01-22)
 
 Features:
 

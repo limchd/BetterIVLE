@@ -26,7 +26,7 @@ function parseTime(timeString,dt) {    //Not originally written by me; only made
     }             
     dt.setHours(hours);
     dt.setMinutes(parseInt(time[3],10) || 0);
-    dt.setMinutes(parseInt(time[5],10) || 0);
+    dt.setSeconds(parseInt(time[5],10) || 0);
     return dt;
 }
 
@@ -80,12 +80,10 @@ if(!skipRest && document.URL.search(/whats_new/i)!=-1){
 			var tempE = new Date();
 			$("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudent").html($("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_spnStudent").html());
 			$.each($("h3.panel-title"),function(i,obj){
-				tempE.setTime(Date.parse($(obj).html()));
+				tempE.setTime(Date.parse($(obj).text()));
 				var childBullets = $(obj).parent().parent().find("li");
 				//Case 1: New days (new <h3> panels)
 				if(tempE > oldD){
-					//TODO: get better colours
-
 					//Is this new day empty?
 					if($(childBullets).length){
 						//Highlight panel
@@ -100,8 +98,9 @@ if(!skipRest && document.URL.search(/whats_new/i)!=-1){
 					if(tempE.getDay()==oldD.getDay()){
 						$.each($(childBullets), function(j, obj2){
 							//Get time
-							if(parseTime($(obj2).find("a[href]").html(),tempE) > oldD)
+							if(parseTime($(obj2).find("a[href]").text(),tempE) > oldD){
 								$(obj2).css("color","#CC2222");
+							}
 						});
 					}
 				}
