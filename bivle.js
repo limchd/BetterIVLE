@@ -29,6 +29,15 @@ function parseTime(timeString,dt) {    //Not originally written by me; only made
     dt.setSeconds(parseInt(time[5],10) || 0);
     return dt;
 }
+function updateAndColourButton(obj)
+{	//Used only for the Workspace. Colours the given button red and updates its count
+	if(isNaN(parseInt($(obj).find("span").text()))){
+		$(obj).find("span").text(1);
+	}else{
+		$(obj).find("span").text(parseInt($(obj).find("span").text())+1);
+	}
+	$(obj).css({"color":"#cc0000"});
+}
 
 //*** START ***
 var skipRest=false;
@@ -36,13 +45,74 @@ var skipRest=false;
 
 //Workspace hack
 if(!skipRest && document.URL.search(/Workspace/i)!=-1){
-	$.each($("div.panel-collapse > div.panel-body > div.panel"),function(i,obj){
+	$.each($("div.panel-collapse > div.panel-body > div.panel"),function(i,obj)
+	{	//Loop through each module's panel
 		//Resize the lecturer row
 		$(obj).find("div.panel-body div.row div.col-md-12").removeClass("col-md-12").addClass("col-md-5");
 		
+		objButtonsParent = $(obj).find("div.panel-heading div.pull-right");
+		//Modify the buttons
+		$.each($(objButtonsParent).find("a[href]"),function(i,obj){
+			$(obj).css({"display":"block","height":"100%","width":"100%"});	//Make a fill up entire div
+			$(obj).appendTo($("<div class='BIVLE_module_button'></div>").appendTo($(objButtonsParent)));	//Insert the a into the div
+		});
+		
 		//Move the button node
-		$(obj).find("div.panel-heading div.pull-right").parent().removeClass("col-md-5").addClass("col-md-7 BIVLE_module_buttons").appendTo($(obj).find("div.panel-body div.row"));
+		$(obj).find("div.panel-body div.row div.col-md-5").removeClass("col-md-5").addClass("col-md-10");	//Resize lecturer div
+		$(objButtonsParent).removeClass("col-md-5").addClass("col-md-2 BIVLE_module_buttons").appendTo($(obj).find("div.panel-body div.row"));
 	});
+	
+	var intUnreadNotificationCount = parseInt($("#echocid").text());
+	if(isNaN(intUnreadNotificationCount)) intUnreadNotificationCount = 0;
+	intUnreadNotificationCount = 5;
+	if(intUnreadNotificationCount)
+	{	//If there are unread notifications
+		//Have to only rely on the unread count because there's no way to recognise if a notification is read or not
+		
+		var arrNotificationBox = $("#ctl00_ctl00_ContentPlaceHolder1_Notifications_lblHtmlContent table.messageBox");
+		for(var i=0;i<intUnreadNotificationCount;i++)
+		{	//Loop through each notification box
+			if(i>=arrNotificationBox.length)
+			{	//Prevent overflows
+				continue;
+			}
+			var obj = arrNotificationBox[i];
+			
+			var objTD = $(obj).find("a[href]:first").parent();
+			//Get the date
+			var arrBrSplit = $(objTD).html().split("<br>");
+			var strDate = $.trim(arrBrSplit[arrBrSplit.length-1]);
+			if(strDate=="")
+			{	//Hack: sometimes there's a blank <br> at the back (damn you IVLE)
+				strDate = $.trim(arrBrSplit[arrBrSplit.length-2]);
+			}
+			
+			//Else sort it into the correct module
+			var strModName = $(obj).find("b").text();
+			var objModPanel = $("div.panel-collapse > div.panel-body > div.panel:contains(" + strModName + ")");
+			
+			//Determine type of notification
+			if($(obj).text().search(/new file uploaded/i)!=-1){
+				//Find the right button
+				$.each($(objModPanel).find(".BIVLE_module_buttons a[href]"),function(i,obj)
+				{
+					if(obj.href.search(/file/i)!=-1){
+						updateAndColourButton($(obj));
+					}
+				});
+			}else if($(obj).text().search(/new announcement/i)!=-1){
+				//Find the right button TODO
+				$.each($(objModPanel).find(".BIVLE_module_buttons a[href]"),function(i,obj)
+				{
+					if(obj.href.search(/announcement/i)!=-1){
+						updateAndColourButton($(obj));
+					}
+				});
+			}
+		}
+		
+
+	}
 }
 
 //Files/Workbin hack
@@ -78,7 +148,8 @@ if(!skipRest && document.URL.search(/whats_new/i)!=-1){
 			oldD.setTime(storedD);
 			//Search within each day
 			var tempE = new Date();
-			$("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudent").html($("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_spnStudent").html());
+			$("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudent").html(
+				$("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_spnStudent").html());
 			$.each($("h3.panel-title"),function(i,obj){
 				tempE.setTime(Date.parse($(obj).text()));
 				var childBullets = $(obj).parent().parent().find("li");
@@ -136,6 +207,10 @@ if(!skipRest){
 		}
 		$("div.navbar-btn").prepend("<span style='margin-right: 10px;color:#D9534F'>Unread: " + $("#ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_ContentPlaceHolder1_divUnread").text() + "</span>");
 		$("#ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_ContentPlaceHolder1_div1").remove();
+		
+		//TODO: fix the dreadful tree view
+		//$("ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_ContentPlaceHolder1_treePosts")
+		
 		if(!skipBreadcrumb) addToTitle(":",true);
 	}
 	//My Usage: intervene only when in module subpage

@@ -1,4 +1,10 @@
-﻿## 0.13 (2016-02-03)
+﻿## 0.14 (2016-02-04)
+
+Features:
+
+	- Workspace: Unread notifications now highlight the appropriate module's file or announcement button
+
+## 0.13 (2016-02-03)
 
 Bugfixes:
 
