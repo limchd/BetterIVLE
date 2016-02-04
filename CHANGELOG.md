@@ -1,4 +1,10 @@
-﻿## 0.14 (2016-02-04)
+﻿## 0.141 (2016-02-05)
+
+Bugfixes:
+
+	- Workspace: Removed a test case that shouldn't be there
+
+## 0.14 (2016-02-04)
 
 Features:
 

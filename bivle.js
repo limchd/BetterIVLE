@@ -64,7 +64,6 @@ if(!skipRest && document.URL.search(/Workspace/i)!=-1){
 	
 	var intUnreadNotificationCount = parseInt($("#echocid").text());
 	if(isNaN(intUnreadNotificationCount)) intUnreadNotificationCount = 0;
-	intUnreadNotificationCount = 5;
 	if(intUnreadNotificationCount)
 	{	//If there are unread notifications
 		//Have to only rely on the unread count because there's no way to recognise if a notification is read or not
