@@ -62,55 +62,53 @@ if(!skipRest && document.URL.search(/Workspace/i)!=-1){
 		$(objButtonsParent).removeClass("col-md-5").addClass("col-md-4 BIVLE_module_buttons").appendTo($(obj).find("div.panel-body div.row"));
 	});
 	
-	/*
-	chrome.storage.sync.get("BIVLE_WorkspaceLastVisited", function(items){
-		var storedD = items["BIVLE_WorkspaceLastVisited"];
-		var oldD = new Date();
-		if(storedD!="undefined"){
-			oldD.setTime(storedD);
-			var tempD = new Date();
+	//Note: DOMSubtreeModified is deprecated
+	//But we have no way of telling which notifications are new or what the notification count is (since it's a signalR request)
+	$("#echocid").bind("DOMSubtreeModified",function(){
+		var intUnreadNotificationCount = $("#echocid").text();
 		
-			$.each($("#ctl00_ctl00_ContentPlaceHolder1_Notifications_lblHtmlContent table.messageBox"),function(i,obj){
-				var objTD = $(obj).find("a[href]:first").parent();
-				//Get the date
-				var arrBrSplit = $(objTD).html().split("<br>");
-				var strDate = $.trim(arrBrSplit[arrBrSplit.length-1]);
-				if(strDate=="")
-				{	//Hack: sometimes there's a blank <br> at the back (damn you IVLE)
-					strDate = $.trim(arrBrSplit[arrBrSplit.length-2]);
-				}
-				//Compare the date with last visited
-				tempD.setTime(Date.parse(strDate));
-				if(tempD > oldD)
-				{	//This entry is newer than last visited time
-					//Sort it into the correct module
-					var strModName = $(obj).find("b").text();
-					var objModPanel = $("div.panel-collapse > div.panel-body > div.panel:contains(" + strModName + ")");
-					
-					//Determine type of notification
-					if($(obj).text().search(/new file uploaded/i)!=-1){
-						//Find the right button
-						$.each($(objModPanel).find(".BIVLE_module_buttons a[href]"),function(i,obj)
-						{
-							if(obj.href.search(/file/i)!=-1){
-								updateAndColourButton($(obj));
-							}
-						});
-					}else if($(obj).text().search(/new announcement/i)!=-1){
-						//Find the right button TODO
-						$.each($(objModPanel).find(".BIVLE_module_buttons a[href]"),function(i,obj)
-						{
-							if(obj.href.search(/announcement/i)!=-1){
-								updateAndColourButton($(obj));
-							}
-						});
+		var arrNotificationBox = $("#ctl00_ctl00_ContentPlaceHolder1_Notifications_lblHtmlContent table.messageBox");
+		for(var i=0;i<intUnreadNotificationCount;i++)
+		{	//Loop through each notification box. We assume that unread notifications start from the beginning & there are no gaps
+			if(i>=arrNotificationBox.length)
+			{	//Prevent overflows
+				continue;
+			}
+			var obj = arrNotificationBox[i];
+			
+			var objTD = $(obj).find("a[href]:first").parent();
+			//Get the date
+			var arrBrSplit = $(objTD).html().split("<br>");
+			var strDate = $.trim(arrBrSplit[arrBrSplit.length-1]);
+			if(strDate=="")
+			{	//Hack: sometimes there's a blank <br> at the back (damn you IVLE)
+				strDate = $.trim(arrBrSplit[arrBrSplit.length-2]);
+			}
+			
+			//Else sort it into the correct module
+			var strModName = $(obj).find("b").text();
+			var objModPanel = $("div.panel-collapse > div.panel-body > div.panel:contains(" + strModName + ")");
+			
+			//Determine type of notification
+			if($(obj).text().search(/new file uploaded/i)!=-1){
+				//Find the right button
+				$.each($(objModPanel).find(".BIVLE_module_buttons a[href]"),function(i,obj)
+				{
+					if(obj.href.search(/file/i)!=-1){
+						updateAndColourButton($(obj));
 					}
-				}
-			});
+				});
+			}else if($(obj).text().search(/new announcement/i)!=-1){
+				//Find the right button
+				$.each($(objModPanel).find(".BIVLE_module_buttons a[href]"),function(i,obj)
+				{
+					if(obj.href.search(/announcement/i)!=-1){
+						updateAndColourButton($(obj));
+					}
+				});
+			}
 		}
 	});
-	chrome.storage.sync.set({"BIVLE_WorkspaceLastVisited": $.now()});
-	*/
 }
 
 //Files/Workbin hack

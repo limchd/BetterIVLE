@@ -1,4 +1,10 @@
-﻿## 0.142 (2016-02-05)
+﻿## 0.143 (2016-02-05)
+
+Bugfixes:
+
+	- Workspace: Unread notifications are now processed again
+
+## 0.142 (2016-02-05)
 
 Bugfixes:
 
