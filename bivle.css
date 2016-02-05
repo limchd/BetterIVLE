@@ -29,6 +29,9 @@ div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules button
 div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules div.panel-body{
 	padding: 10px !important;
 }
+div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules div.panel-body div.panel-body{	/*Module panel contents*/
+	padding: 3px 10px !important;
+}
 .panel-heading{
 	line-height: normal !important;
 }
@@ -36,8 +39,29 @@ div#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_pnlStudentModules div.pa
 	margin-bottom: 10px !important;
 }
 div.BIVLE_module_buttons{
-	font-size: 20px;
 	text-align: right !important;
+	padding: 0px 10px;
+}
+div.BIVLE_module_button{
+	background-color: #f0f0f0;
+	/*color: #000;*/
+	font-size: 25px;
+	padding: 0px;
+	/*float: left;*/
+	margin: 0px 4px;
+	text-align: center;
+	vertical-align: middle;
+	display: table;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	display: inline-block;
+}
+div.BIVLE_module_button a{
+	/*color: #000 !important;*/
+}
+div.BIVLE_module_button a:hover, div.BIVLE_module_button a:focus{
+	/*color: #000 !important;*/
 }
 
 table.breadcrumb{

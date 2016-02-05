@@ -1,4 +1,11 @@
-﻿## 0.141 (2016-02-05)
+﻿## 0.142 (2016-02-05)
+
+Bugfixes:
+
+	- Workspace: Buttons now float right and shouldn't overflow to the next line if the announcement panel is enabled
+	- Workspace: Disabled unread notification processing temporarily pending a workaround
+
+## 0.141 (2016-02-05)
 
 Bugfixes:
 
